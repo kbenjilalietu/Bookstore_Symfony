@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../css/logo1.png" rel="icon">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+
+        {% block stylesheets %}
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+            <link rel="stylesheet" href="{{ asset('css/styleListLivre.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/navbarStyle.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/styleListAutor.css') }}">
+        {% endblock %}
+
+
+    </head>
+    <body>
+
+    <nav class="navbar navbar-expand-custom navbar-mainbg">
+        <a class="navbar-brand navbar-logo" href="{{ path('livre_index') }}" style=" font-family: Arial, sans-serif; font-weight:bold;font-size: 22px; margin-left: 40px">BookStore</a>
+        <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="color:white;font-size:30px;font-weight:bold;"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" style="float:left; padding-right: 60px;">
+            <ul class="navbar-nav ml-auto" style="margin-left: 620px;">
+                <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
+
+                <li class="nav-item" >
+                    <a class="nav-link" href="{{ path('livre_index') }}" id="book" style="margin: 0px 10px" id="navLivre"><i class="bi bi-book"></i>Livres</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('auteur_index') }}" id="autor" style="margin: 0px 10px" id="navAuteur"><i class="bi bi-people"></i>Auteurs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('genre_index') }}" id="categorie" style="margin: 0px 10px"><i class="bi bi-bookmarks"></i>Genre</a>
+                </li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}" id="log" style="margin: 0px 10px"><i class="bi bi-box-arrow-in-left"></i>Se déconnecter</a>
+                    </li>
+                {% else %}
+                   <li class="nav-item">
+                      <a class="nav-link" href="{{ path('app_login') }}"  style="margin: 0px 10px"><i class="bi bi-box-arrow-in-right"></i>Se connecter</a>
+                   </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid ">
+        {% block body %}
+        {% endblock %}
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+            <script src="{{ asset('/js/navbarScript.js') }}"></script>
+        {% endblock %}
+
+    </div>
+
+    </body>
+</html>

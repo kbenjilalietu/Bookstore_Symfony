@@ -1,0 +1,26 @@
+.container{
+    background: url("") no-repeat top center;
+}
+
+.card{
+    background: transparent;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.ligneLiv .row{
+    font-size: 17px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid blanchedalmond;
+    padding: 6px 0px;
+    font-weight: bolder;
+}
+.ligneLiv .row .col-4{
+    font-weight: bold;
+    color: #1b75bb;
+    padding-left:40px;
+
+}
+.ligneLiv .row .col-6{
+    padding-left: 90px;
+}

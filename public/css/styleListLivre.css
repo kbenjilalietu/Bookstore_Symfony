@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans:900');
+
+/*
+  AUTO GRID
+  Set the minimum item size with `--auto-grid-min-size` and you'll
+  get a fully responsive grid with no media queries.
+*/
+#livres {
+  --auto-grid-min-size: 16rem;
+   align-content: flex-start;
+   display: block;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   padding: 1rem;
+}
+#tableLivre{
+    text-align: left;
+}
+#tableLivre tr td{
+    padding-top: 5px;
+}
+#tableLivre tr td:first-child{
+    padding-right:20px;
+}
+input[type=number], .form-select, input[type=text]
+{
+   border: 1px #313a43 solid;
+}
+
+.card {
+    border-top: 3px #Faaf40 solid;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  cursor: pointer;
+  height: 300px;
+  margin: 15px;
+  padding: 0 20px;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.025);
+  text-align: center;
+  transition: height 1000ms;
+  width: 330px;
+}
+@media (max-width: 767px) {
+  .card {
+    left: calc(50% - 20px);
+    transform: translateX(-50%);
+  }
+}
+.card.expanded {
+  height: 340px;
+}
+.label {
+  margin-top: 10px;
+  transform: translateY(10px);
+  transition: transform 1000ms;
+}
+.card.expanded .label {
+  transform: translateY(30);
+}
+.text1 {
+  clip-path: polygon(0% 100%, 0 -90%, 50% -5%, 100% -90%, 100% 100%);
+  -webkit-clip-path: polygon(0% 100%, 0 -90%, 50% -5%, 100% -90%, 100% 100%);
+  transition: clip-path 1000ms;
+}
+.card.expanded .text1 {
+  clip-path: polygon(0% 100%, 0 -100%, 50% -15%, 100% -100%, 100% 100%);
+  -webkit-clip-path: polygon(0% 100%, 0 -100%, 50% -15%, 100% -100%, 100% 100%);
+}
+.text-content {
+  transform: translateY(-160px);
+  transition: transform 1000ms;
+}
+.card.expanded .text-content {
+  transform: translateY(0px);
+}
+.chevron {
+  position: absolute;
+  bottom: 20px;
+  left: calc(50% - 15px);
+  transform-origin: 50%;
+  transform: rotate(180deg);
+  transition: transform 1000ms;
+}
+.card.expanded .chevron {
+  transform: rotate(0deg);
+}
+.title {
+  font-family: 'Alegreya Sans', sans-serif;
+  font-weight: 900;
+  margin: 0px 0 12px;
+}
+.body-text {
+  padding: 0 20px;
+}

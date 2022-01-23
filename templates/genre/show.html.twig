@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Genre
+{% endblock %}
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="{{ asset('css/styleShowLivre.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navbarStyle.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4" style="margin-left: 100px;">
+        <div class="row">
+
+            <div class="col-8" style="margin-left: 30px;margin-right: 10px">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Genre</h1>
+                    </div>
+                    <div class="col" style="padding-left: 20px;">
+                        <a class="btn" href="{{ path('genre_index') }}" style="background-color: #26a9e0"><i class="bi bi-skip-backward" style="color:white;font-size:20px;margin-left: 10px;"></i></a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="btn" href="{{ path('genre_edit', {'id': genre.id}) }}" style="background-color: #faaf40"><i class="bi bi-pen" style="color:white;font-size:20px;margin-left: 10px;"></i></a>
+                            {{ include('genre/_delete_form.html.twig') }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="card mt-2" style="padding: 30px 40px;">
+                        <div class="row ligneLiv">
+                            <div class="row">
+                                <div class="col-4">
+                                    Id :
+                                </div>
+                                <div class="col-7">
+                                    {{ genre.id }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    Genre :
+                                </div>
+                                <div class="col-7">
+                                    {{ genre.nom }}
+                                </div>
+                            </div>
+                            <div class="row" style="padding-bottom: 10px">
+                                <div class="col-4">
+                                    Livres :
+                                </div>
+                                <div class="col-7">
+                                    {% for livre in genre.livres %}
+                                        <span class="row" style="padding:6px 15px; background-color: rgba(252,195,112,0.75); border-radius: 8px">
+							{{ livre }}
+                           </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="margin-left: 40px; margin-top: 20px">
+                <img src="/livre.jpg" width="330" height="580">
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

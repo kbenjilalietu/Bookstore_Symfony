@@ -1,0 +1,191 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres
+{% endblock %}
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="{{ asset('css/styleListLivre.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navbarStyle.css') }}">
+
+    <style>
+        .page-link:hover{
+            background-color: #faaf40;
+            color: #FFFFFF;
+            font-weight: bolder;
+        }
+        .page-link:active{
+            background-color: #26a9e0;
+            color: #212529;
+            font-weight: bolder;
+
+        }
+        .pagination{
+            color: #212529;
+            font-weight: bolder;
+            border: none;
+        }
+        .page-link{
+            color: #212529;
+            font-weight: bolder;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/pagination.js"></script>
+
+{% endblock %}
+{% block body %}
+
+<div class="row">
+<div class="col-sm-2" style="padding:0px 20px 30px 30px; width: 340px; ">
+    <div style="margin-bottom: 50px; margin-left: 35px">
+        <img src="/logo2.png" width="250px" height="250px">
+    </div>
+    <div style="margin-left: 20px">
+    <form method="POST" onsubmit="chercher(event)">
+        <div style="font-size: 18px; margin-bottom: 10px">Rechercher </div>
+        <div class="input-group mb-3" style="padding-bottom: 30px">
+                <input id="motCle" aria-describedby="button-addon2" type="text" class="form-control">
+                <button class="btn btn-outline" id="button-addon2" style="padding-left:20px; background-color:  #26a9e0;color: white;font-weight: bold; font-size: 18px"><i class="bi bi-search"></i></button>
+        </div>
+
+    </form>
+    <form method="POST" onsubmit="list(event)">
+		<div style="font-size: 18px;margin: 0px 0px 10px 0px; text-align: justify" >Lister les livres dont la date de parution est comprise entre deux années données
+		</div>
+        <div class="input-group mb-3" style="padding-bottom: 30px">
+           <input id="dateMin" type="number"  style="margin-top: 8px; height: 45px" min="1900"  step="1" value="2000" class="form-control">
+           <input id="dateMax" type="number" style="margin-top: 8px; height: 45px" step="1" value="2021" max="2022" class="form-control">
+           <button class="btn btn-primary my-2" style=" background-color:  #26a9e0;height: 45px;font-weight: bold; font-size: 18px;"><i class="bi bi-funnel" style="padding-left: 8px"></i></button>
+        </div>
+    </form>
+
+    <div style="font-size: 18px; margin-bottom: 10px">Filter selon</div>
+    <select class="form-select mt-2" onchange="filtrerParNote(event)">
+        <option selected>Note</option>
+        {% for i in 0..20 %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-select mt-2" onchange="filtrerParDate(event)">
+        <option selected>Date de publication</option>
+        {% for date in dates|sort  %}
+            <option value="{{date.date_de_parution|date("Y-m-d")}}">{{date.date_de_parution|date("Y-m-d")}}</option>
+        {% endfor %}
+    </select>
+    <select class="form-select mt-2" onchange="filtrerParAuteur(event)">
+        <option selected>Auteur</option>
+        {% for auteur in auteurs %}
+            <option value="{{auteur.id}}">{{auteur.nomPrenom}}</option>
+        {% endfor %}
+    </select>
+    <select class="form-select mt-2" onchange="filtrerParGenre(event)">
+        <option selected>Genre</option>
+        {% for genre in genres %}
+            <option value="{{genre.id}}">{{genre.nom}}</option>
+        {% endfor %}
+    </select>
+    </div>
+</div>
+<div class="col-sm">
+    <div class="row container" style="margin-top: 30px">
+        <div class="col-sm-10">
+           <h1 style="margin-left:10px; ">Liste des livres</h1>
+        </div>
+        <div class="col-2">
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="row">
+                <a class="btn btn-light" href="{{ path('livre_new') }}" style="border:1px slategray dashed; font-size:18px;width:150px; float: right; margin-bottom: 20px"><i class="bi bi-plus-square-dotted" style="padding-right: 10px;"></i>  Ajouter</a>
+            </div>
+        {% endif %}
+        </div>
+
+        <div>
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin: 20px 20px 10px 30px; ">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <i class="bi bi-info-circle"></i> {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    <ul class="auto-grid" id="Section1" style="display: flex; align-content: center; align-items: center; flex-direction: row; flex-wrap: wrap">
+
+        {% for livre in livres %}
+        <li style="list-style: none; display: inline-block;">
+            <!-- partial:index.partial.html -->
+            <div class="card" onclick="this.classList.toggle('expanded')">
+                <div class="label">
+                    <h2 class="title">{{ livre.titre }}</h2>
+                      <table id="tableLivre">
+                        <tbody>
+                           <tr>
+                            <td><strong>ISBN-13</strong>:</td>
+                            <td><strong><strong>{{ livre.isbn }}</strong></strong></td>
+                        </tr>
+                           <tr>
+                            <td><strong>Date de parution</strong>:</td>
+                            <td>{{ livre.dateDeParution ? livre.dateDeParution|date('Y-m-d') : '' }}</td>
+                        </tr>
+                           <tr>
+                            <td><strong>Nombre de pages</strong>:</td>
+                            <td>{{ livre.nombrePages }}</td>
+                        </tr>
+                           <tr>
+                            <td><strong>Note</strong>:</td>
+                            <td><span id="livre-note-{{ livre.id }}">{{ livre.note }}</span></td>
+                        </tr>
+                           <tr>
+                           <td colspan="3">
+                            <div class="text1" style="margin: 20px 0px 40px 20px">
+                                <div class="text-content">
+                                    <div class="body-text">
+                                        <a class="btn" href="{{ path('livre_show', {'id': livre.id}) }}" style="background-color: #26a9e0"><i class="bi bi-eye" style="color:white;font-size:20px;margin-left: 10px;"></i></a>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <a class="btn" href="{{ path('livre_edit', {'id': livre.id}) }}" style="background-color: #faaf40"><i class="bi bi-pen" style="color:white;font-size:20px;margin-left: 10px;"></i></a>
+                                            {{ include('livre/_delete_form.html.twig') }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                          </td>
+
+                        </tr>
+                        </tbody>
+                      </table>
+                </div>
+                <div style="margin-top: 80px">
+                   <svg  class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 35" width="30">
+                       <path d="M5 30L50 5l45 25" fill="none" stroke="#000" stroke-width="5"/>
+                   </svg>
+                </div>
+            </div>
+        </li>
+        {% else %}
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <i class="bi bi-info-circle"></i> Aucun résultat
+            </div>
+        {% endfor %}
+    </ul>
+    <div class="row">
+        <div class="clearfix" style="padding-right: 70px">
+            <div style="display: flex; justify-content: flex-end; align-content: flex-end;">
+
+                <ul class="pagination">
+                    <li id="previous-page"><button style="padding:0px 10px;height: 38px;background-color: #313a43; color: #FFFFFF" href="javascript:void(0)">Précédent</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+
+{% endblock %}
+
